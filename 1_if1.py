@@ -19,7 +19,25 @@ def main():
     Эта функция вызывается автоматически при запуске скрипта в консоли
     В ней надо заменить pass на ваш код
     """
-    pass
+    age = int(input('Введите ваш возраст: '))
+    occupation = define_occupation(age)
+    print(occupation)
+
+def define_occupation(age):
+
+    occupation = ''
+    if age < 6:
+        occupation = 'Детский сад'
+    elif age < 17:
+        occupation = 'Пора в школу'
+    elif age < 23:
+        occupation = 'Время института'
+    elif age < 70:
+        occupation = 'Иди работаать'
+    else:
+        occupation = 'Пора на пенсию'
+    
+    return occupation
 
 if __name__ == "__main__":
     main()
