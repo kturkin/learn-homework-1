@@ -19,6 +19,7 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 logging.basicConfig(format='%(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO,
                     filename='bot.log')
+import ephem
 
 
 PROXY = {
@@ -31,7 +32,7 @@ PROXY = {
 
 
 def greet_user(update, context):
-    text = 'Вызван /start'
+    text = 'Called /start'
     print(text)
     update.message.reply_text(text)
 
@@ -39,14 +40,37 @@ def greet_user(update, context):
 def talk_to_me(update, context):
     user_text = update.message.text
     print(user_text)
-    update.message.reply_text(text)
+    update.message.reply_text(user_text)
 
 
+def process_planet(update, context):
+    
+    tokenized = update.message.text.split(' ')
+    if len(tokenized) < 2:
+        update.message.reply_text('Choose a planet. Type it after /planet with space.')
+    planet_name = ' '.join(tokenized[1:])
+
+    observer = ephem.Observer()
+    observer.date = ephem.now()
+
+    try:
+        planet = getattr(ephem, planet_name)()
+    except AttributeError:
+        update.message.reply_text(f'Sorry, no {planet_name} planet in database. Try another one.')
+        return
+
+    planet.compute(observer)
+    constellation = ephem.constellation(planet)
+
+    update.message.reply_text(f'{planet_name} today is in {constellation[1]} constellation')
+
+    
 def main():
-    mybot = Updater("КЛЮЧ, КОТОРЫЙ НАМ ВЫДАЛ BotFather", request_kwargs=PROXY, use_context=True)
+    mybot = Updater('7933775141:AAF9TqkaGQyu-adu-38pHonxCKNvVDLKy28', use_context = True)
 
     dp = mybot.dispatcher
     dp.add_handler(CommandHandler("start", greet_user))
+    dp.add_handler(CommandHandler("planet", process_planet))
     dp.add_handler(MessageHandler(Filters.text, talk_to_me))
 
     mybot.start_polling()
