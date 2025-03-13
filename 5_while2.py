@@ -15,13 +15,19 @@
     
 """
 
-questions_and_answers = {}
+questions_and_answers = {'How are you?' : 'All good',
+                         'What do you do?' : "I'm working",
+                         "What's new?" : 'Started learning python'}
 
-def ask_user(answers_dict):
-    """
-    Замените pass на ваш код
-    """
-    pass
+def ask_user(answers_dict: dict):
+
+    the_question = input('Talk to me: ')
+
+    while the_question.lower() not in ['bye', 'stop', 'exit', 'finish']:
+        
+        the_answer = answers_dict.get(the_question, 'Ask something else')
+        print(the_answer)
+        the_question = input('Talk to me: ')
     
 if __name__ == "__main__":
     ask_user(questions_and_answers)

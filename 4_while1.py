@@ -11,11 +11,11 @@
 
 
 def hello_user():
-    """
-    Замените pass на ваш код
-    """
-    pass
-
     
+    the_answer = input('How are you?  ')
+    while the_answer.lower() not in ['good', 'fine', 'nice']:
+        the_answer = input('How are you?  ')
+
+
 if __name__ == "__main__":
     hello_user()
